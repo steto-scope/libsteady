@@ -4,4 +4,10 @@ Makefile.in
 configure
 aclocal.m4
 *.a
+*.o
+*.log
+*.status
+libtool
+Makefile
+.deps
 test_libsteady
