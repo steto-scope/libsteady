@@ -58,8 +58,22 @@ void llist_print_cb(LList *list, void (*callback)(void*));
  * @param int index of the element
  */
 void* llist_get(LList *list, int index);
+/**
+ * Absorbes the nodes of a list into another and frees it
+ * @param LList* the list to insert into
+ * @param int position of the insertion
+ * @param LList* the list to be absorbed. 
+ * 	  After execution this LList-Pointer will be freed and set to NULL
+ * @return 0 on error, otherwise 1. Absorbing NULL is not considered an error
+ */
+int llist_absorb(LList *list, int index, LList *secondList);
+/**
+ * Frees a linked list shallow
+ * @param LList* the list to be free'd
+ */
+void llist_free(LList *list);
 
-#define llist_append(list, data)	llist_insert(list, list->size, data)
-#define llist_prepend(list, data)	llist_insert(list, 0, data)
+#define llist_append(list, data)	llist_insert(list, list->size, (void*)data)
+#define llist_prepend(list, data)	llist_insert(list, 0, (void*)data)
 
 #endif

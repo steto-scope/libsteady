@@ -50,4 +50,6 @@ void llist_print_cb(LList *list, void (*callback)(void*));
 void* llist_get(LList *list, int index);
 int llist_append(list, data);
 int llist_prepend(list, data);	
+int llist_absorb(LList *list, int index, LList *secondList);
+void llist_free(LList *list);
 ```

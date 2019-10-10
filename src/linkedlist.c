@@ -64,6 +64,49 @@ int llist_insert(LList *list, int pos, void *data)
 	return 1;
 }
 
+int llist_absorb(LList *list, int index, LList *secondList)
+{
+	LNode *n;
+	LNode *o;
+	int i;
+
+	if(list == NULL || index < 0) {
+		return 0;
+	}
+	if(secondList == NULL) {
+		return 1;
+	}
+	n = secondList->head;
+
+	if(list->size < 1) {
+		list->head = n;
+		list->tail = n;
+		list->size++;
+	} 
+	else if(index == 0) {
+		n->next = list->head;
+		list->head = n;
+		list->size++;
+	}
+	else if(index >= list->size) {
+		list->tail->next = n;
+		secondList->tail = NULL;
+		list->size += secondList->size;
+	} 
+	else {
+		o = list->head;
+		for(i=0; i+1<index && o != NULL; i++) {
+			o = o->next;
+		}
+		secondList->tail->next = o->next;
+		o->next = n;
+		list->size += secondList->size;
+	}
+	free(secondList);
+	secondList = NULL;
+	return 1;
+}
+
 int llist_indexof(LList *list, void *data)
 {
 	LNode *n;
@@ -140,7 +183,7 @@ void llist_print(LList *list, char *format)
 	if(list->size > 0) {
 		do {
 			printf(" -> ");
-			printf(format, n->data);
+			printf(format, n->data, n->next);
 		}
 		while((n = n->next) != NULL);
 	}
@@ -161,4 +204,24 @@ void llist_print_cb(LList *list, void (*callback)(void*))
 		while((n = n->next) != NULL);
 	}
 	printf("\n");
+}
+
+void llist_free(LList *list)
+{
+	LNode *n;
+	LNode *nn;
+
+	if(list == NULL) {
+		return;
+	}
+
+	n = list->head;
+	while(n->next != NULL) {
+		nn = n->next;
+		free(n);
+		n = nn;
+	}
+
+	free(n);
+	free(list);
 }

@@ -11,3 +11,4 @@ libtool
 Makefile
 .deps
 test_libsteady
+.vscode
